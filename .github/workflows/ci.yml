@@ -1,0 +1,34 @@
+name: Integración Continua
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Ejecutar aplicación
+        run: node index.js
+
+      - name: Enviar notificación a ntfy
+        run: |
+          curl \
+            -H "Title: GitHub Actions" \
+            -H "Priority: default" \
+            -H "Tags: github,ci" \
+            -d "Integración continua ejecutada correctamente 🚀" \
+            https://ntfy.sh/devops-itla
